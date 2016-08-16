@@ -1,0 +1,21 @@
+{
+  "name": "personal-homepage",
+  "homepage": "https://github.com/royshum93/royshum93.github.io",
+  "authors": [
+    "Roy Shum <waikinshum@yahoo.com.hk>"
+  ],
+  "description": "My github personal homepage for testing stuff",
+  "main": "index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
