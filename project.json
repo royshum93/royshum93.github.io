@@ -1,0 +1,15 @@
+[
+    {
+        "header": "HTML5 mini game",
+        "image": "/img/rocketWar.png",
+        "desc": "A little HTML5 game. 2 players jumping around the scene and shoot at each other using rocker launcher!",
+        "link": "https://github.com/royshum93/rocketWar",
+        "buildTech": [{
+            "name": "Phaser! Powerful JS game engine",
+            "link": "http://phaser.io/"
+        }, {
+            "name": "Socket.io, WebSocket library",
+            "link": "http://socket.io/"
+        }]
+    }
+]

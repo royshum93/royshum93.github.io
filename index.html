@@ -11,8 +11,10 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" rel="stylesheet">
 
+    <base href="/">
+
     <!-- Custom styles for this template -->
-    <link href="css/starter-template.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -22,6 +24,15 @@
     <![endif]-->
   </head>
   <body>
+    
+    <script type="text/ng-template" id="showImg.html">
+      <div class="modal-body" id="modal-body">
+          <img ng-src="{{::modal.src}}">
+      </div>
+      <div class="modal-footer">
+          <button class="btn btn-primary" type="button" ng-click="modal.close()">That's awesome!</button>
+      </div>
+    </script>
 
     <nav class="navbar navbar-inverse navbar-fixed-top" ng-controller="navbarCtrl as navbar">
       <div class="container">
@@ -36,27 +47,53 @@
         </div>
         <div class="hidden-xs">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li ng-class="item.className" ng-repeat="item in ::navbar.menuItems">
+                <a ng-href="{{::item.link}}" ng-bind="::item.name"></a>
+            </li>
           </ul>
         </div>
         <div id="navbar" uib-collapse="!navbar.isCollapsed">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li ng-class="item.className" ng-repeat="item in ::navbar.menuItems">
+                <a ng-href="{{::item.link}}" ng-bind="::item.name"></a>
+            </li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container">
-
-      <div class="starter-template">
-        <h1>Roy, Shum Wai Kin</h1>
-        <p class="lead">Cloned from Bootstrap starter template. <br> 
-        Here is for Day 0.</p>
+      <div class="jumbotron">
+        <h1>Roy Shum</h1>
+        <p>Know about my profiles and projects.</p>
+      </div>
+      
+      <div class="col-md-12">
+        <section ng-controller="projectCtrl as proj">
+            <div class="page-header" close-others="false"><h1>Project</h1></div>
+            <uib-accordion ng-if="::proj.projectArr">
+              <div uib-accordion-group is-open="true" class="panel-default" heading="{{project.header}}" ng-repeat="project in ::proj.projectArr">
+                <div class="col-md-4">
+                    <img ng-src="{{project.image}}" show-pic>
+                </div>
+                <div class="col-md-8">
+                    <label>Description:</label><span ng-bind="::project.desc"></span><br>
+                    <div ng-if="::project.buildTech">
+                        <label>How I built it:</label>
+                        <button class="btn btn-info" ng-repeat="tech in ::project.buildTech" style="margin-right: 10px;">
+                          <a ng-href="{{::tech.link}}" ng-bind="::tech.name" target="_blank"></a>
+                        </button>
+                    </div>
+                    <br>
+                    <div ng-if="::project.link">
+                      <label>You can find it here:</label>
+                      <a ng-href="{{::project.link}}" ng-bind="::project.link"></a>
+                    </div>
+                </div>
+              </div>
+            </uib-accordion>
+        </section>
+        
       </div>
 
     </div><!-- /.container -->
@@ -70,11 +107,57 @@
     <script>
         /* global angular */
         angular.module('app', ['ngAnimate', 'ngTouch', 'ui.bootstrap'])
+          .directive('showPic', ['$uibModal', function($uibModal) {
+              return {
+                restrict: 'A',
+                link: function(scope, element, attrs) {
+                    element.on('click', function() {
+                      $uibModal.open({
+                          controller: ['$uibModalInstance', function($uibModalInstance) {
+                                            var vm = this;
+                                            vm.close = $uibModalInstance.close;
+                                            vm.src = attrs.src;
+                                      }],
+                          controllerAs: 'modal',
+                          templateUrl: "showImg.html"
+                      });
+                    });
+                }
+              };
+          }])
+          
+          .service('dataService', ['$http', function($http) {
+              var self = this;
+              
+              self.getProjectList = function(projects) {
+                  return $http.get('/project.json')
+                    .then(function(projects) {
+                        return projects.data;
+                    });
+              };
+          }])
+        
           .controller('navbarCtrl', [function() {
               var vm = this;
               
+              vm.menuItems = [{
+                            name: 'Home',
+                            link: '#',
+                            className: 'active'
+                        }];
+              
               vm.isCollapsed = false;
+          }])
+          
+          .controller('projectCtrl', ['dataService', function(dataService) {
+              var vm = this;
+              
+              dataService.getProjectList()
+                .then(function(projects) {
+                    vm.projectArr = projects;
+                });
           }]);
+          
     </script>
   </body>
 </html>
