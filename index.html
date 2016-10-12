@@ -70,9 +70,9 @@
       
       <div class="col-md-12">
         <section ng-controller="projectCtrl as proj">
-            <div class="page-header" close-others="false"><h1>Project</h1></div>
+            <div class="page-header" close-others="::proj.closeOtherProjects"><h1>Project</h1></div>
             <uib-accordion ng-if="::proj.projectArr">
-              <div uib-accordion-group is-open="true" class="panel-default" heading="{{project.header}}" ng-repeat="project in ::proj.projectArr">
+              <div uib-accordion-group is-open="project.isOpen" class="panel-default" heading="{{project.header}}" ng-repeat="project in ::proj.projectArr">
                 <div class="col-md-4">
                     <img ng-src="{{project.image}}" show-pic>
                 </div>
@@ -119,7 +119,8 @@
                                             vm.src = attrs.src;
                                       }],
                           controllerAs: 'modal',
-                          templateUrl: "showImg.html"
+                          templateUrl: "showImg.html",
+                          size: 'lg'
                       });
                     });
                 }
@@ -132,7 +133,11 @@
               self.getProjectList = function(projects) {
                   return $http.get('/project.json')
                     .then(function(projects) {
-                        return projects.data;
+                        return projects.data
+                          .map(function(item) {
+                              item.isOpen = true;
+                              return item;
+                          });
                     });
               };
           }])
@@ -151,6 +156,8 @@
           
           .controller('projectCtrl', ['dataService', function(dataService) {
               var vm = this;
+              
+              vm.closeOtherProjects = false;
               
               dataService.getProjectList()
                 .then(function(projects) {

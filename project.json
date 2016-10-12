@@ -11,5 +11,33 @@
             "name": "Socket.io, WebSocket library",
             "link": "http://socket.io/"
         }]
+    },
+    {
+        "header": "Photo Album",
+        "image": "/img/album.png",
+        "desc": "A photo album, upload a photo and add effect on it",
+        "link": "http://csci4140asg1-roydemosite.rhcloud.com",
+        "buildTech": [{
+            "name": "Python 2",
+            "link": "https://www.python.org/"
+        }, {
+            "name": "Imagemagick, image processer",
+            "link": "http://www.imagemagick.org/script/index.php"
+        }]
+    },
+    
+    {
+        "header": "Youtube Remote Control",
+        "image": "/img/youtube.png",
+        "desc": "A remote control for youtube, control video play within same session",
+        "link": "http://youtube-roydemosite.rhcloud.com",
+        "buildTech": [{
+            "name": "Youtube iframe API",
+            "link": "https://developers.google.com/youtube/iframe_api_reference"
+        }, {
+            "name": "Socket.io",
+            "link": "http://socket.io/"
+        }]
     }
+    
 ]
